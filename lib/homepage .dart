@@ -4,17 +4,19 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             height: 280,
+
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height,
             child: ClipPath(
               child: Image.asset(
-                'image/vote.jpg',
+                'images/vote.jpg',
               ),
               clipper: CustomClipPath(),
             ),
@@ -29,19 +31,18 @@ class Homepage extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 35,
                   fontStyle: FontStyle.italic)),
-          Expanded(
-              child: Card(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white70, width: 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 10,
-            shadowColor: Colors.orange[50],
-            margin: const EdgeInsets.fromLTRB(40, 0, 40, 5),
-            child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Column(
+          ListView.builder(
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 10,
+                  margin: const EdgeInsets.fromLTRB(40, 0, 40, 5),
+                  shadowColor: Colors.orange[50],
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.white70, width: 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
                     children: [
                       Container(
                         color: Colors.blue,
@@ -49,7 +50,8 @@ class Homepage extends StatelessWidget {
                         child: Column(
                           children: [
                             Expanded(
-                              child: Image.asset("image/profile.jpg"),
+                              flex: 4,
+                              child: Image.asset("images/profile.jpg"),
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -78,9 +80,9 @@ class Homepage extends StatelessWidget {
                         height: 15,
                       ),
                     ],
-                  );
-                }),
-          ))
+                  ),
+                );
+              })
         ],
       ),
     );
