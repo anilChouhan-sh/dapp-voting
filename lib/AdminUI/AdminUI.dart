@@ -50,9 +50,9 @@ class AdminUI extends StatelessWidget {
                     builder: (context) {
                       var height = MediaQuery.of(context).size.height;
                       var width = MediaQuery.of(context).size.width;
-                      return SizedBox(
-                        height: height - 400,
-                        width: width - 400,
+                      return Container(
+                        height: height,
+                        width: width,
                         child: AlertDialog(
                           content: Container(
                             height: 40,
