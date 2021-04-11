@@ -4,12 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loading_animations/loading_animations.dart';
+
 import 'package:provider/provider.dart';
 import 'Firebase/Providers/privateKeyprovider.dart';
 import 'Firebase/Providers/userProviders.dart';
-import 'Firebase/auth.dart';
+
 import 'Sign-up/Login.dart';
 import 'Sign-up/signup.dart';
 
