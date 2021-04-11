@@ -1,3 +1,5 @@
+import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
+import 'package:dapp_voting/Firebase/candidates.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +11,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var contractLink = Provider.of<ContractLinking>(context);
-
+    var candidatesProvider = Provider.of<CandidatesProvider>(context);
     return Scaffold(
       drawer: Drawer(
         child: DrawerItem(),
@@ -38,44 +40,50 @@ class Homepage extends StatelessWidget {
           Expanded(
               child: SizedBox(
             height: 500,
-            child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.fromLTRB(35, 5, 35, 5),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white70, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    color: Colors.blue,
-                    child: Container(
-                      height: 200,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: Image.asset("images/profile.jpg"),
+            child: StreamBuilder<List<Candidates>>(
+                stream: candidatesProvider.candidates,
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: EdgeInsets.fromLTRB(35, 5, 35, 5),
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white70, width: 1),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          Text("Lakshay",
-                              style: TextStyle(
-                                  fontSize: 35, fontStyle: FontStyle.italic)),
-                          RaisedButton(
-                            color: Colors.orange,
-                            child: Text(
-                              "VOTE",
-                              style: TextStyle(color: Colors.white),
+                          color: Colors.blue,
+                          child: Container(
+                            height: 200,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: Image.asset("images/profile.jpg"),
+                                ),
+                                Text(snapshot.data[index].name,
+                                    style: TextStyle(
+                                        fontSize: 35,
+                                        fontStyle: FontStyle.italic)),
+                                RaisedButton(
+                                  color: Colors.orange,
+                                  child: Text(
+                                    "VOTE",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () {
+                                    contractLink
+                                        .givevoteTo(snapshot.data[index].id);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                              ],
                             ),
-                            onPressed: () {
-                              contractLink.givevoteTo(index);
-                            },
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                        );
+                      });
                 }),
           ))
         ],

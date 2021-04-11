@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import '../firestore.dart';
 import '../candidates.dart';
 
-class CandidatesProvider with ChangeNotifier {
+class CandidatesProvider extends ChangeNotifier {
   final firestore = Firestore_ser();
 
   Candidates _currentCandidate;
