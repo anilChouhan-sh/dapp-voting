@@ -1,8 +1,12 @@
+import 'package:dapp_voting/Blockchain/contract_linking.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var contractLink = Provider.of<ContractLinking>(context);
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -58,7 +62,9 @@ class Homepage extends StatelessWidget {
                               "VOTE",
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              contractLink.givevoteTo(index);
+                            },
                           ),
                           SizedBox(
                             height: 15,

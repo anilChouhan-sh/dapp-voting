@@ -84,4 +84,11 @@ class ContractLinking extends ChangeNotifier {
             contract: _contract, function: _setName, parameters: [nameToSet]));
     getName();
   }
+
+  givevoteTo(int id) async {
+    await _client.sendTransaction(
+        _credentials,
+        Transaction.callContract(
+            contract: _contract, function: _setName, parameters: [id]));
+  }
 }

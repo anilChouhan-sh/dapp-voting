@@ -1,3 +1,4 @@
+import 'package:dapp_voting/Blockchain/contract_linking.dart';
 import 'package:dapp_voting/homepage%20.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,6 +32,11 @@ class MainScreen extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) {
               return Keyprovider();
+            },
+          ),
+          ChangeNotifierProvider(
+            create: (context) {
+              return ContractLinking();
             },
           ),
         ],
