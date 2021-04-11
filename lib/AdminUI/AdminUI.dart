@@ -17,7 +17,6 @@ class AdminUI extends StatelessWidget {
         children: [
           Container(
             height: 280,
-
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height,
             child: ClipPath(
@@ -50,57 +49,53 @@ class AdminUI extends StatelessWidget {
                     builder: (context) {
                       var height = MediaQuery.of(context).size.height;
                       var width = MediaQuery.of(context).size.width;
-                      return SizedBox(
-                        height: height - 400,
-                        width: width - 400,
-                        child: AlertDialog(
-                          content: Container(
-                            height: 40,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
-                                  controller: name,
-                                  decoration: InputDecoration(
-                                    hintText: 'Name',
-                                    //border: InputBorder.none,
-                                  ),
+                      return AlertDialog(
+                        content: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                                controller: name,
+                                decoration: InputDecoration(
+                                  hintText: 'Name',
+                                  //border: InputBorder.none,
                                 ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
-                                  controller: id,
-                                  decoration: InputDecoration(
-                                    hintText: 'Id',
-                                    //border: InputBorder.none,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              color: Colors.green,
-                              child: Text(
-                                "ADD",
-                                style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                              TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                                controller: id,
+                                decoration: InputDecoration(
+                                  hintText: 'Id',
+                                  //border: InputBorder.none,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        actions: <Widget>[
+                          FlatButton(
+                            color: Colors.green,
+                            child: Text(
+                              "ADD",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
                       );
                     },
                   );
