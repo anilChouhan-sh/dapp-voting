@@ -47,10 +47,7 @@ class Firestore_ser {
     else if (collection == 'users')
       return _db.collection(collection).doc().set(entry.toMap(), options);
     else
-      return _db
-          .collection(collection)
-          .doc(entry.voterID)
-          .set(entry.toMap(), options);
+      return _db.collection(collection).doc().set(entry.toMap(), options);
   }
 
   //Delete

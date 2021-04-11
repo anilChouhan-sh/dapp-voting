@@ -19,12 +19,12 @@ class CandidatesProvider extends ChangeNotifier {
   Candidates get currentUser => _currentCandidate;
 //setter
 
-  set changeCurrentCandidates(Candidates name) {
-    _currentCandidate = name;
+  set changename(String name) {
+    _name = name;
     notifyListeners();
   }
 
-  set changevoterID(int id) {
+  set changeid(int id) {
     _id = id;
     notifyListeners();
   }
@@ -42,7 +42,7 @@ class CandidatesProvider extends ChangeNotifier {
 
   savecandidates() {
     //Edit
-    var updatedCandidates = Candidates(name: _name, id: _id);
-    firestore.setEntry(updatedCandidates, 'candidates');
+    var updatedUser = Candidates(name: _name, id: _id);
+    firestore.setEntry(updatedUser, 'candidates');
   }
 }

@@ -97,6 +97,9 @@ class AdminUI extends StatelessWidget {
                               style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () {
+                              candidates.changeid = int.parse(id.text.trim());
+                              candidates.changename = name.text.trim();
+                              candidates.savecandidates();
                               Navigator.of(context).pop();
                             },
                           ),
@@ -117,22 +120,24 @@ class AdminUI extends StatelessWidget {
           ),
           SizedBox(
             height: 300,
-            child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white70, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 3,
-                    margin: EdgeInsets.fromLTRB(25, 8, 25, 8),
-                    child: SizedBox(
-                        height: 50,
-                        child: Column(
-                          children: [],
-                        )),
-                  );
+            child: StreamBuilder<List<Candidates>>(
+                stream: candidates.candidates,
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white70, width: 1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 3,
+                          margin: EdgeInsets.fromLTRB(25, 8, 25, 8),
+                          child: SizedBox(
+                              height: 50,
+                              child: Text(snapshot.data[index].name)),
+                        );
+                      });
                 }),
           ),
           Row(
