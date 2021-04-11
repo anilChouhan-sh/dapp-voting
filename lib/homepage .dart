@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
+import 'package:dapp_voting/Firebase/Providers/userProviders.dart';
 import 'package:dapp_voting/Firebase/candidates.dart';
+import 'package:dapp_voting/Firebase/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'Blockchain/contract_linking.dart';
-import 'Firebase/auth.dart';
+import 'Drawer/draweritem.dart';
 
 class Homepage extends StatelessWidget {
   @override
@@ -38,12 +40,15 @@ class Homepage extends StatelessWidget {
                   fontSize: 35,
                   fontStyle: FontStyle.italic)),
           Expanded(
-              child: SizedBox(
-            height: 500,
-            child: StreamBuilder<List<Candidates>>(
+            child: SizedBox(
+              height: 500,
+              child: StreamBuilder<List<Candidates>>(
                 stream: candidatesProvider.candidates,
                 builder: (context, snapshot) {
-                  return ListView.builder(
+                  if (snapshot.data.length == 0) {
+                    return Text("Voting has not started");
+                  } else {
+                    return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
                         return Card(
@@ -63,6 +68,7 @@ class Homepage extends StatelessWidget {
                                 ),
                                 Text(snapshot.data[index].name,
                                     style: TextStyle(
+                                        color: Colors.white,
                                         fontSize: 35,
                                         fontStyle: FontStyle.italic)),
                                 RaisedButton(
@@ -83,71 +89,14 @@ class Homepage extends StatelessWidget {
                             ),
                           ),
                         );
-                      });
-                }),
-          ))
-        ],
-      ),
-    );
-  }
-}
-
-class DrawerItem extends StatelessWidget {
-  const DrawerItem({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Auth auth = new Auth();
-    return DrawerHeader(
-      child: ListView(
-        children: [
-          ListTile(
-            leading: Icon(CupertinoIcons.profile_circled),
-            title: Text('My Profile'),
-            onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => MyProfile()));
-            },
-          ),
-          Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: ListTile(
-              leading: Icon(Icons.login_outlined),
-              title: Text('Logout'),
-              onTap: () async {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Text("Are you sure you want to Logout"),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FlatButton(
-                            child: Text(
-                              "Logout",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                            onPressed: () async {
-                              await auth.signOut();
-                              Navigator.pushNamed(context, '/');
-                            },
-                          ),
-                        ],
-                      );
-                    });
-              },
+                      },
+                    );
+                  }
+                  ;
+                },
+              ),
             ),
-          ),
+          )
         ],
       ),
     );

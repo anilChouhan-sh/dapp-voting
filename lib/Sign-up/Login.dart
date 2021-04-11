@@ -30,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
         fontSize: 16.0);
   }
 
+  String admin = "yaWsyFxwYbOW035C6md6OtnNwTb2";
+
   bool obscure = false;
   @override
   Widget build(BuildContext context) {
@@ -131,7 +133,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ]);
                         }
                         if (FirebaseAuth.instance.currentUser.emailVerified) {
-                          Navigator.pushNamed(context, '/');
+                          if (FirebaseAuth.instance.currentUser.uid == admin) {
+                            Navigator.pushNamed(context, '/AdminUI');
+                          } else {
+                            Navigator.pushNamed(context, '/');
+                          }
                         } else {
                           myToast('Email Not verified.');
                         }
