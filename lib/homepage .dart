@@ -1,6 +1,9 @@
-import 'package:dapp_voting/Blockchain/contract_linking.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'Blockchain/contract_linking.dart';
+import 'Firebase/auth.dart';
 
 class Homepage extends StatelessWidget {
   @override
@@ -8,25 +11,24 @@ class Homepage extends StatelessWidget {
     var contractLink = Provider.of<ContractLinking>(context);
 
     return Scaffold(
+      drawer: Drawer(
+        child: DrawerItem(),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             height: 280,
+
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height,
             child: ClipPath(
               child: Image.asset(
-                'image/vote.jpg',
+                'images/vote.jpg',
               ),
               clipper: CustomClipPath(),
             ),
-            // decoration: BoxDecoration(
-            //     color: Colors.white12,
-            //     borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(50),
-            //         bottomRight: Radius.circular(20))),
           ),
           Text("   Participants list ",
               style: TextStyle(
@@ -40,6 +42,7 @@ class Homepage extends StatelessWidget {
                 itemCount: 3,
                 itemBuilder: (context, index) {
                   return Card(
+                    margin: EdgeInsets.fromLTRB(35, 5, 35, 5),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(color: Colors.white70, width: 1),
                       borderRadius: BorderRadius.circular(10),
@@ -51,7 +54,7 @@ class Homepage extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Expanded(
-                            child: Image.asset("image/profile.jpg"),
+                            child: Image.asset("images/profile.jpg"),
                           ),
                           Text("Lakshay",
                               style: TextStyle(
@@ -75,6 +78,68 @@ class Homepage extends StatelessWidget {
                   );
                 }),
           ))
+        ],
+      ),
+    );
+  }
+}
+
+class DrawerItem extends StatelessWidget {
+  const DrawerItem({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Auth auth = new Auth();
+    return DrawerHeader(
+      child: ListView(
+        children: [
+          ListTile(
+            leading: Icon(CupertinoIcons.profile_circled),
+            title: Text('My Profile'),
+            onTap: () {
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => MyProfile()));
+            },
+          ),
+          Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: ListTile(
+              leading: Icon(Icons.login_outlined),
+              title: Text('Logout'),
+              onTap: () async {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text("Are you sure you want to Logout"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text(
+                              "Logout",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () async {
+                              await auth.signOut();
+                              Navigator.pushNamed(context, '/');
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              },
+            ),
+          ),
         ],
       ),
     );

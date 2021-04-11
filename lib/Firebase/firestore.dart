@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dapp_voting/Firebase/candidates.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dapp_voting/Firebase/users.dart';
@@ -31,6 +32,11 @@ class Firestore_ser {
   Stream<List<Users>> getUsers() {
     return _db.collection('user').snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
+  }
+
+  Stream<List<Candidates>> getCandidates() {
+    return _db.collection('candidates').snapshots().map((snapshot) =>
+        snapshot.docs.map((doc) => Candidates.fromJson(doc.data())).toList());
   }
 
 //Upsert
