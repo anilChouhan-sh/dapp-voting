@@ -47,9 +47,12 @@ class AdminUI extends StatelessWidget {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) {
+                    builder: (context) {
+                      var height = MediaQuery.of(context).size.height;
+                      var width = MediaQuery.of(context).size.width;
                       return SizedBox(
-                        height: 100,
+                        height: height - 400,
+                        width: width - 400,
                         child: AlertDialog(
                           content: Container(
                             height: 40,
