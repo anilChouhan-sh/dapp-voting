@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dapp_voting/Firebase/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -79,28 +80,28 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               //for Email !!!!!
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  controller: username,
-                  cursorColor: Colors.teal[700],
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.email,
-                      color: Colors.teal[700],
-                    ),
-                    hintText: 'Email',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+              //   child: TextFormField(
+              //     validator: (value) {
+              //       if (value.isEmpty) {
+              //         return 'Please enter some text';
+              //       }
+              //       return null;
+              //     },
+              //     controller: username,
+              //     cursorColor: Colors.teal[700],
+              //     decoration: InputDecoration(
+              //       icon: Icon(
+              //         Icons.email,
+              //         color: Colors.teal[700],
+              //       ),
+              //       hintText: 'Email',
+              //       border: InputBorder.none,
+              //     ),
+              //   ),
+              // ),
 
               //password
               Padding(
@@ -139,15 +140,31 @@ class _SignupScreenState extends State<SignupScreen> {
               RaisedButton(
                 color: Colors.teal[700],
                 onPressed: () async {
-                  if (_formkey.currentState.validate()) {
-                    print('hogayaa     bhai 23 ');
-                    User x = await auth.createUser(
-                        username.text, password.text, voterID.text, name.text);
-                    if (x != null) {
-                      Navigator.pop(context);
+                  bool right_vid = false;
+
+                  CollectionReference ref =
+                      FirebaseFirestore.instance.collection('voterIDs');
+
+                  var x = await ref
+                      .where("id", isEqualTo: voterID.text)
+                      .get()
+                      .then((value) async {
+                    print(value.docs.length);
+                    if (value.docs.length > 0) {
+                      if (_formkey.currentState.validate()) {
+                        print('hogayaa     bhai 23 ');
+                        User x = await auth.createUser(value.docs[0]["email"],
+                            password.text, voterID.text.trim(), name.text);
+                        if (x != null) {
+                          Navigator.pop(context);
+                        }
+                      }
+                    } else {
+                      auth.myToast("Wrong VoterID");
                     }
-                    ;
-                  }
+                  });
+
+                  print("askjdklj $x");
 
                   print('hogayaa     bhai');
                 },

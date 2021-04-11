@@ -44,7 +44,7 @@ class Homepage extends StatelessWidget {
                 stream: candidatesProvider.candidates,
                 builder: (context, snapshot) {
                   return ListView.builder(
-                      itemCount: snapshot.data.length,
+                      itemCount: snapshot.data?.length,
                       itemBuilder: (context, index) {
                         return Card(
                           margin: EdgeInsets.fromLTRB(35, 5, 35, 5),

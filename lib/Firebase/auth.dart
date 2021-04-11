@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'privateKeys.dart';
+
 abstract class BaseAuth {
   Future<bool> currentUser(BuildContext context);
   Future<String> signIn(String email, String password);
@@ -56,13 +58,34 @@ class Auth implements BaseAuth {
         print("dfsfwerfgrewgfrgrgewrgrwegwr");
         print(e.message);
       }
-      CollectionReference ref = FirebaseFirestore.instance.collection('user');
-      ref.doc(user.user.uid).set({
-        "name": name,
-        "email": user.user.email,
-        "voterID": voterID,
-        "userid": user.user.uid,
+
+      CollectionReference key_ref =
+          FirebaseFirestore.instance.collection('privatekeys');
+
+      await key_ref.where("taken", isEqualTo: false).get().then((value) async {
+        print("length of private keys${value.docs.length}");
+
+        if (value.docs.length > 0) {
+          CollectionReference ref =
+              FirebaseFirestore.instance.collection('user');
+          ref.doc(user.user.uid).set({
+            "name": name,
+            "email": user.user.email,
+            "voterID": voterID,
+            "userid": user.user.uid,
+            "privatekey": value.docs[0]["key"]
+          });
+
+          var key = PrivateKeys(
+              key: value.docs[0]["key"], taken: true, assignedto: x.uid);
+          var options = SetOptions(merge: true);
+
+          value.docs[0].reference.set(key.toMap(), options);
+        } else {
+          myToast("Error in assigning a token");
+        }
       });
+
       myToast('User Created.Check Your inbox for email verification');
       return user.user;
     } on FirebaseAuthException catch (e) {
