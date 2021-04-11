@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "613355769821",
+    "project_id": "dapp-voting-bb064",
+    "storage_bucket": "dapp-voting-bb064.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613355769821:android:0fa2716cb89fdd8aaef034",
+        "android_client_info": {
+          "package_name": "com.example.dapp_voting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613355769821-4drrgv29bnsgin1o0nqmi33q0ppfohd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6nPw5HMwbMiIqN08kaXfPU4AD1S8Z_ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613355769821-4drrgv29bnsgin1o0nqmi33q0ppfohd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
