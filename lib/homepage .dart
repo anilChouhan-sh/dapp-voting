@@ -30,54 +30,42 @@ class Homepage extends StatelessWidget {
                   fontSize: 35,
                   fontStyle: FontStyle.italic)),
           Expanded(
-              child: Card(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white70, width: 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 10,
-            shadowColor: Colors.orange[50],
-            margin: const EdgeInsets.fromLTRB(40, 0, 40, 5),
+              child: SizedBox(
+            height: 500,
             child: ListView.builder(
                 itemCount: 3,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Container(
-                        color: Colors.blue,
-                        height: 250,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset("image/profile.jpg"),
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.white70, width: 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: Colors.blue,
+                    child: Container(
+                      height: 200,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: Image.asset("image/profile.jpg"),
+                          ),
+                          Text("Lakshay",
+                              style: TextStyle(
+                                  fontSize: 35, fontStyle: FontStyle.italic)),
+                          RaisedButton(
+                            color: Colors.orange,
+                            child: Text(
+                              "VOTE",
+                              style: TextStyle(color: Colors.white),
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Lakshay",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 35,
-                                        fontStyle: FontStyle.italic)),
-                                Expanded(
-                                  child: RaisedButton(
-                                    color: Colors.orange,
-                                    child: Text(
-                                      "VOTE",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                            onPressed: () {},
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                    ],
+                    ),
                   );
                 }),
           ))

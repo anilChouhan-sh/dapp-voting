@@ -37,6 +37,9 @@ dependencies:
   fluttertoast: ^7.1.5
   provider: ^4.3.2+4
   loading_animations: ^2.1.0
+  web3dart: ^1.2.3
+  http: ^0.12.2
+  web_socket_channel: ^1.2.0
 
 dev_dependencies:
   flutter_test:
