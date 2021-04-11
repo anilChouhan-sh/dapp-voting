@@ -1,13 +1,18 @@
 import 'package:dapp_voting/Drawer/draweritem.dart';
+import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
+import 'package:dapp_voting/Firebase/candidates.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../homepage .dart';
 
 class AdminUI extends StatelessWidget {
   var name = new TextEditingController();
   var id = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    var candidates = Provider.of<CandidatesProvider>(context);
     return Scaffold(
       drawer: Drawer(
         child: DrawerItem(),
@@ -17,7 +22,6 @@ class AdminUI extends StatelessWidget {
         children: [
           Container(
             height: 280,
-
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height,
             child: ClipPath(
@@ -48,59 +52,55 @@ class AdminUI extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      var height = MediaQuery.of(context).size.height;
-                      var width = MediaQuery.of(context).size.width;
-                      return Container(
-                        height: height,
-                        width: width,
-                        child: AlertDialog(
-                          content: Container(
-                            height: 40,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
-                                  controller: name,
-                                  decoration: InputDecoration(
-                                    hintText: 'Name',
-                                    //border: InputBorder.none,
-                                  ),
+                      // var height = MediaQuery.of(context).size.height;
+                      // var width = MediaQuery.of(context).size.width;
+                      return AlertDialog(
+                        content: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                                controller: name,
+                                decoration: InputDecoration(
+                                  hintText: 'Name',
+                                  //border: InputBorder.none,
                                 ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
-                                  controller: id,
-                                  decoration: InputDecoration(
-                                    hintText: 'Id',
-                                    //border: InputBorder.none,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              color: Colors.green,
-                              child: Text(
-                                "ADD",
-                                style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                              TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                                controller: id,
+                                decoration: InputDecoration(
+                                  hintText: 'Id',
+                                  //border: InputBorder.none,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        actions: <Widget>[
+                          FlatButton(
+                            color: Colors.green,
+                            child: Text(
+                              "ADD",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
                       );
                     },
                   );

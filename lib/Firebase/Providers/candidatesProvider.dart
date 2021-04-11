@@ -42,7 +42,7 @@ class CandidatesProvider extends ChangeNotifier {
 
   savecandidates() {
     //Edit
-    var updatedUser = Candidates(name: _name, id: _id);
-    firestore.setEntry(updatedUser, 'user');
+    var updatedCandidates = Candidates(name: _name, id: _id);
+    firestore.setEntry(updatedCandidates, 'candidates');
   }
 }
