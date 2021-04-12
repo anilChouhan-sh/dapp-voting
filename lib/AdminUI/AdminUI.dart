@@ -188,11 +188,12 @@ class _AdminUIState extends State<AdminUI> {
                   status == true
                       ? setState(() {
                           status = false;
+                          linkPorvider.start_voting(myToast);
                         })
                       : setState(() {
                           status = true;
+                          linkPorvider.end_voting(myToast);
                         });
-                  linkPorvider.start_voting(myToast);
                 },
               ),
             ],
