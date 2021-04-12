@@ -9,7 +9,7 @@ import 'package:web_socket_channel/io.dart';
 class ContractLinking extends ChangeNotifier {
   final String _rpcUrl = "http://172.30.65.57:9999/";
   String _privateKey;
-
+  String _results = "Not yet declared";
   String get privatekey => _privateKey;
 
   set changekey(String key) {
@@ -145,13 +145,12 @@ class ContractLinking extends ChangeNotifier {
     }
   }
 
-  declareResults(Function mytoast) async {
+  Future<dynamic> declareResults(Function mytoast) async {
     String result = "";
     try {
-      var ids,
-          votes = await _client
-              .call(contract: _contract, function: _declareResults, params: []);
-      print("$ids , $votes");
+      var ans = await _client
+          .call(contract: _contract, function: _declareResults, params: []);
+      print("$ans");
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
