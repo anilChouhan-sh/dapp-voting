@@ -48,10 +48,11 @@ module.exports = {
      network_id: "*",       // Any network (default: none)
     },
     anil: {
-      host: "172.30.78.102",     // Localhost (default: none)
+      host: "172.30.65.57",     // Localhost (default: none)
       port: 9999,            // Standard Ethereum port (default: none)
-      network_id: "*",
-      websockets : true       // Any network (default: none)
+      network_id: "5777",
+      websockets : true ,
+      from: '0x9ec9E4D59CAE005e546B48bb84eC17dcCa4392d5'      // Any network (default: none)
      },
     // Another network with more advanced options...
     // advanced: {
@@ -79,6 +80,7 @@ module.exports = {
     // production: true    // Treats this network as if it was a public net. (default: false)
     // }
   },
+  contracts_build_directory: "./assests",
 
   // Set default mocha options here, use special reporters etc.
   mocha: {

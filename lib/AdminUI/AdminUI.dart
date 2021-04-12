@@ -28,7 +28,7 @@ class _AdminUIState extends State<AdminUI> {
         fontSize: 16.0);
   }
 
-  bool status = false;
+  bool status = true;
   bool tap = false;
 
   @override
@@ -188,10 +188,15 @@ class _AdminUIState extends State<AdminUI> {
                   status == true
                       ? setState(() {
                           status = false;
+                          linkPorvider.start_voting(myToast);
                         })
                       : setState(() {
                           status = true;
+<<<<<<< HEAD
                           linkPorvider.start_voting(myToast);
+=======
+                          linkPorvider.end_voting(myToast);
+>>>>>>> d2673c9b5af2db821f343a25a3633fee0237383c
                         });
                 },
               ),
@@ -199,7 +204,8 @@ class _AdminUIState extends State<AdminUI> {
           ),
           RaisedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/result');
+              linkPorvider.declareResults(myToast);
+              //Navigator.pushNamed(context, '/result');
             },
             color: Colors.blue[700],
             child: Text(

@@ -12,17 +12,25 @@ class UserProvider with ChangeNotifier {
   String _voterID;
   String _email;
   String _userid;
+  String _key;
 //getter
+
   String get name => _name;
   String get voterID => _voterID;
   String get email => _email;
   String get userid => _userid;
   Stream<List<Users>> get users => firestore.getUsers();
   Users get currentUser => _currentUser;
+  String get key => currentUser.privatekey;
 //setter
 
   set changeCurrentUser(Users name) {
     _currentUser = name;
+    notifyListeners();
+  }
+
+  set changekey(String key) {
+    _key = key;
     notifyListeners();
   }
 
