@@ -1,7 +1,9 @@
+import 'package:dapp_voting/Blockchain/contract_linking.dart';
 import 'package:dapp_voting/Drawer/draweritem.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
 import 'package:dapp_voting/Firebase/candidates.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../homepage .dart';
@@ -9,9 +11,20 @@ import '../homepage .dart';
 class AdminUI extends StatelessWidget {
   var name = new TextEditingController();
   var id = new TextEditingController();
+  myToast(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
 
   @override
   Widget build(BuildContext context) {
+    var linkPorvider = Provider.of<ContractLinking>(context);
     var candidates = Provider.of<CandidatesProvider>(context);
     return Scaffold(
       drawer: Drawer(
@@ -149,7 +162,9 @@ class AdminUI extends StatelessWidget {
                   "Start Voting",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  linkPorvider.start_voting(myToast);
+                },
               ),
               SizedBox(
                 width: 10,
@@ -157,10 +172,12 @@ class AdminUI extends StatelessWidget {
               RaisedButton(
                 color: Colors.red,
                 child: Text(
-                  "Stop Voating",
+                  "Stop Voting",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  linkPorvider.start_voting(myToast);
+                },
               ),
             ],
           ),
