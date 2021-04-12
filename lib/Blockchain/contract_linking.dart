@@ -7,15 +7,23 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ContractLinking extends ChangeNotifier {
-  final String _rpcUrl = "http://172.30.68.239:9999/";
-  final String _privateKey =
-      "0x432b469ca985c0aac786ee6e38d50c1418b40dffb4527aa3e80e8179ec83d86f";
+  final String _rpcUrl = "http://172.30.65.57:9999/";
+  String _privateKey;
+
+  String get privatekey => _privateKey;
+
+  set changekey(String key) {
+    _privateKey = key;
+    // print("Your Key $_privateKey");
+    notifyListeners();
+  }
 
   Web3Client _client;
   bool isLoading = true;
 
   String _abiCode;
   EthereumAddress _contractAddress;
+  EthereumAddress _accountAddress;
 
   Credentials _credentials;
 
@@ -44,16 +52,17 @@ class ContractLinking extends ChangeNotifier {
 
   Future<void> getAbi() async {
     // Reading the contract abi
-    String abiStringFile = await rootBundle.loadString("assests/Hello.json");
+    String abiStringFile = await rootBundle.loadString("assests/Voting.json");
     var jsonAbi = jsonDecode(abiStringFile);
     _abiCode = jsonEncode(jsonAbi["abi"]);
 
-    _contractAddress = EthereumAddress.fromHex(
-        jsonAbi["networks"]["1617890874639"]["address"]);
+    _contractAddress =
+        EthereumAddress.fromHex(jsonAbi["networks"]["5777"]["address"]);
   }
 
   Future<void> getCredentials() async {
     _credentials = await _client.credentialsFromPrivateKey(_privateKey);
+    _accountAddress = await _credentials.extractAddress();
   }
 
   Future<void> getDeployedContract() async {
@@ -120,7 +129,7 @@ class ContractLinking extends ChangeNotifier {
     }
   }
 
-  givevoteTo(int id, Function mytoast) async {
+  givevoteTo(BigInt id, Function mytoast) async {
     isLoading = true;
     notifyListeners();
     String result = "";
@@ -128,17 +137,25 @@ class ContractLinking extends ChangeNotifier {
       await _client.sendTransaction(
           _credentials,
           Transaction.callContract(
-              contract: _contract, function: _start_voting, parameters: [id]));
+              contract: _contract, function: _givevoteTo, parameters: [id]));
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
       print(result);
     }
+  }
 
-    declareResults() async {
-      var currentName = await _client
-          .call(contract: _contract, function: _declareResults, params: []);
-      print(currentName);
+  declareResults(Function mytoast) async {
+    String result = "";
+    try {
+      var ids,
+          votes = await _client
+              .call(contract: _contract, function: _declareResults, params: []);
+      print("$ids , $votes");
+    } on RPCError catch (e) {
+      result = e.message.split(':')[1].substring(7);
+      mytoast(result);
+      print(result);
     }
   }
 }

@@ -28,7 +28,7 @@ class _AdminUIState extends State<AdminUI> {
         fontSize: 16.0);
   }
 
-  bool status = false;
+  bool status = true;
   bool tap = false;
 
   @override
@@ -200,7 +200,8 @@ class _AdminUIState extends State<AdminUI> {
           ),
           RaisedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/result');
+              linkPorvider.declareResults(myToast);
+              //Navigator.pushNamed(context, '/result');
             },
             color: Colors.blue[700],
             child: Text(

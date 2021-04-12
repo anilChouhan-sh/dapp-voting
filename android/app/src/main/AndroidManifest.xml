@@ -2,6 +2,7 @@
     package="com.example.dapp_voting">
    <application
         android:label="dapp_voting"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

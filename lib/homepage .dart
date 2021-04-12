@@ -3,7 +3,6 @@ import 'package:dapp_voting/AdminUI/AdminUI.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
 import 'package:dapp_voting/Firebase/Providers/userProviders.dart';
 import 'package:dapp_voting/Firebase/candidates.dart';
-import 'package:dapp_voting/Firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'Blockchain/contract_linking.dart';
 import 'Drawer/draweritem.dart';
+import 'Firebase/users.dart';
 
 class Homepage extends StatelessWidget {
-  String admin = "yaWsyFxwYbOW035C6md6OtnNwTb2";
+  String admin = "ZEaA8e7mTOU07JysJtqIQobP4ON2";
   myToast(String msg) {
     Fluttertoast.showToast(
         msg: msg,
@@ -29,6 +29,19 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     var contractLink = Provider.of<ContractLinking>(context);
     var candidatesProvider = Provider.of<CandidatesProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+
+    Future<void> user() async {
+      DocumentSnapshot x = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .get();
+
+      userProvider.changeCurrentUser = Users.fromJson(x.data());
+      contractLink.changekey = userProvider.currentUser.privatekey;
+    }
+
+    user();
     if (FirebaseAuth.instance.currentUser.uid == admin) {
       return AdminUI();
     } else {
@@ -97,7 +110,8 @@ class Homepage extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       contractLink.givevoteTo(
-                                          snapshot.data[index].id, myToast);
+                                          BigInt.from(snapshot.data[index].id),
+                                          myToast);
                                     },
                                   ),
                                   SizedBox(

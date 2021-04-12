@@ -73,11 +73,14 @@ contract Voting {
     }
     
     function givevoteTo(uint  _id) public has_started {
-        require(voters[msg.sender].allowed , "Voter Not allowed to vote");
-        require(voters[msg.sender].weight == 1 , "Already voted") ;
-        require(candidates[_id].candidate_id == _id , "No such Candidate") ;
-        candidates[_id].no_of_votes += voters[msg.sender].weight ;
-        voters[msg.sender].weight = 0 ;
+        // require(voters[msg.sender].allowed , "Voter Not allowed to vote");
+        // require(voters[msg.sender].weight == 1 , "Already voted") ;
+        // require(candidates[_id].candidate_id == _id , "No such Candidate") ;
+        // candidates[_id].no_of_votes += voters[msg.sender].weight ;
+        // voters[msg.sender].weight = 0 ;
+        
+        candidates[_id].no_of_votes ++ ;
+
     }
   
     function declareResults() public view returns (uint[] memory , uint[] memory) {
