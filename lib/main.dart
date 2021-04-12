@@ -1,4 +1,5 @@
 import 'package:dapp_voting/AdminUI/AdminUI.dart';
+import 'package:dapp_voting/AdminUI/results.dart';
 import 'package:dapp_voting/Blockchain/contract_linking.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
 
@@ -60,6 +61,7 @@ class MainScreen extends StatelessWidget {
               '/login': (context) => LoginScreen(),
               '/votescreen': (context) => Homepage(),
               '/AdminUI': (context) => AdminUI(),
+              '/result': (context) => Results(),
             }));
   }
 }

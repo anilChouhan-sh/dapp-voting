@@ -1,3 +1,4 @@
+import 'package:dapp_voting/AdminUI/results.dart';
 import 'package:dapp_voting/Drawer/draweritem.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
 import 'package:dapp_voting/Firebase/candidates.dart';
@@ -6,9 +7,18 @@ import 'package:provider/provider.dart';
 
 import '../homepage .dart';
 
-class AdminUI extends StatelessWidget {
+class AdminUI extends StatefulWidget {
+  @override
+  _AdminUIState createState() => _AdminUIState();
+}
+
+class _AdminUIState extends State<AdminUI> {
   var name = new TextEditingController();
+
   var id = new TextEditingController();
+
+  bool status = false;
+  bool tap = false;
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +137,7 @@ class AdminUI extends StatelessWidget {
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
                         return Card(
+                          color: Colors.white,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.white70, width: 1),
                             borderRadius: BorderRadius.circular(10),
@@ -135,7 +146,14 @@ class AdminUI extends StatelessWidget {
                           margin: EdgeInsets.fromLTRB(25, 8, 25, 8),
                           child: SizedBox(
                               height: 50,
-                              child: Text(snapshot.data[index].name)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                child: Text(
+                                  snapshot.data[index].name,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              )),
                         );
                       });
                 }),
@@ -144,26 +162,38 @@ class AdminUI extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RaisedButton(
-                color: Colors.green,
-                child: Text(
-                  "Start Voting",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {},
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              RaisedButton(
-                color: Colors.red,
-                child: Text(
-                  "Stop Voating",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {},
+                color: status == true ? Colors.green : Colors.red,
+                child: status == true
+                    ? Text(
+                        "Start Voting",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Text(
+                        "Stop Voating",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                onPressed: () {
+                  status == true
+                      ? setState(() {
+                          status = false;
+                        })
+                      : setState(() {
+                          status = true;
+                        });
+                },
               ),
             ],
           ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/result');
+            },
+            color: Colors.blue[700],
+            child: Text(
+              "Show Results",
+              style: TextStyle(color: Colors.white),
+            ),
+          )
         ],
       ),
     );
