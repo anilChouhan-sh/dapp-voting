@@ -191,8 +191,8 @@ class _AdminUIState extends State<AdminUI> {
                         })
                       : setState(() {
                           status = true;
+                          linkPorvider.start_voting(myToast);
                         });
-                  linkPorvider.start_voting(myToast);
                 },
               ),
             ],
