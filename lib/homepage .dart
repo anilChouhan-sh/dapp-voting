@@ -7,12 +7,24 @@ import 'package:dapp_voting/Firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'Blockchain/contract_linking.dart';
 import 'Drawer/draweritem.dart';
 
 class Homepage extends StatelessWidget {
   String admin = "yaWsyFxwYbOW035C6md6OtnNwTb2";
+  myToast(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     var contractLink = Provider.of<ContractLinking>(context);
@@ -84,8 +96,8 @@ class Homepage extends StatelessWidget {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onPressed: () {
-                                      contractLink
-                                          .givevoteTo(snapshot.data[index].id);
+                                      contractLink.givevoteTo(
+                                          snapshot.data[index].id, myToast);
                                     },
                                   ),
                                   SizedBox(
