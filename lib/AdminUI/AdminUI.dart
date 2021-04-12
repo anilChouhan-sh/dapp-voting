@@ -200,9 +200,9 @@ class _AdminUIState extends State<AdminUI> {
           ),
           RaisedButton(
             onPressed: () async {
-              List ans = await linkPorvider.declareResults(myToast);
+              await linkPorvider.declareResults(myToast);
 
-              print(ans[1]);
+              // print(ans[1]);
               //Navigator.pushNamed(context, '/result');
             },
             color: Colors.blue[700],
