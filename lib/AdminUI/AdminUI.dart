@@ -1,8 +1,9 @@
-import 'package:dapp_voting/AdminUI/results.dart';
+import 'package:dapp_voting/Blockchain/contract_linking.dart';
 import 'package:dapp_voting/Drawer/draweritem.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
 import 'package:dapp_voting/Firebase/candidates.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../homepage .dart';
@@ -16,12 +17,23 @@ class _AdminUIState extends State<AdminUI> {
   var name = new TextEditingController();
 
   var id = new TextEditingController();
+  myToast(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
 
   bool status = false;
   bool tap = false;
 
   @override
   Widget build(BuildContext context) {
+    var linkPorvider = Provider.of<ContractLinking>(context);
     var candidates = Provider.of<CandidatesProvider>(context);
     return Scaffold(
       drawer: Drawer(
@@ -180,6 +192,7 @@ class _AdminUIState extends State<AdminUI> {
                       : setState(() {
                           status = true;
                         });
+                  linkPorvider.start_voting(myToast);
                 },
               ),
             ],
