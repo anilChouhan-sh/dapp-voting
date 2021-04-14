@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ContractLinking extends ChangeNotifier {
-  final String _rpcUrl = "http://34.93.210.173:9999/";
+  final String _rpcUrl = "http://172.30.73.0/:9999/";
   String _privateKey;
   String _results = "Not yet declared";
   String get privatekey => _privateKey;
@@ -53,8 +54,12 @@ class ContractLinking extends ChangeNotifier {
   }
 
   Future<void> getAbi() async {
+    final response = await http.get(Uri.http('172.30.73.0', 'Voting.json'));
     // Reading the contract abi
-    String abiStringFile = await rootBundle.loadString("assests/Voting.json");
+    //String abiString = await rootBundle.loadString("assests/Voting.json");
+    String abiStringFile = response.body;
+    print("got from internet ${abiStringFile.substring(0, 20)}");
+    //  print("got  ${abiString.substring(0, 20)}");
     var jsonAbi = jsonDecode(abiStringFile);
     _abiCode = jsonEncode(jsonAbi["abi"]);
 
