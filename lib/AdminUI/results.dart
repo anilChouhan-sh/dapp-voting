@@ -34,7 +34,9 @@ class Results extends StatelessWidget {
                 child: Container(
                   height: 120,
                   width: 100,
-                  child: Text("team no"),
+                  child: Center(
+                      child: Text("1",
+                          style: TextStyle(color: Colors.white, fontSize: 20))),
                 ),
               ),
               Card(
@@ -47,7 +49,9 @@ class Results extends StatelessWidget {
                 child: Container(
                   height: 100,
                   width: 100,
-                  child: Text("team no"),
+                  child: Center(
+                      child: Text("2",
+                          style: TextStyle(color: Colors.white, fontSize: 20))),
                 ),
               ),
               Card(
@@ -60,7 +64,11 @@ class Results extends StatelessWidget {
                 child: Container(
                   height: 80,
                   width: 100,
-                  child: Text("team no"),
+                  child: Center(
+                      child: Text(
+                    "3",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  )),
                 ),
               )
             ],
