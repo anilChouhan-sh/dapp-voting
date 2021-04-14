@@ -7,6 +7,10 @@ class Results extends StatelessWidget {
   Widget build(BuildContext context) {
     var linkPorvider = Provider.of<ContractLinking>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Result'),
+        backgroundColor: Colors.orange,
+      ),
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -15,9 +19,52 @@ class Results extends StatelessWidget {
           Center(
             child: Text(
               "Congratulation",
-              style: TextStyle(fontSize: 40),
+              style: TextStyle(fontSize: 40, color: Colors.orange),
             ),
           ),
+          Row(
+            children: [
+              Card(
+                color: Colors.orange,
+                margin: EdgeInsets.fromLTRB(25, 20, 10, 5),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.white70, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  height: 120,
+                  width: 100,
+                  child: Text("team no"),
+                ),
+              ),
+              Card(
+                color: Colors.green,
+                margin: EdgeInsets.fromLTRB(25, 20, 10, 0),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.white70, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Text("team no"),
+                ),
+              ),
+              Card(
+                color: Colors.blue,
+                margin: EdgeInsets.fromLTRB(25, 20, 10, 0),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.white70, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  height: 80,
+                  width: 100,
+                  child: Text("team no"),
+                ),
+              )
+            ],
+          )
         ],
       ),
     );
