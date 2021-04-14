@@ -65,11 +65,23 @@ class Homepage extends StatelessWidget {
                 clipper: CustomClipPath(),
               ),
             ),
-            Text("   Participants list ",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 35,
-                    fontStyle: FontStyle.italic)),
+            Row(
+              children: [
+                Text("   Participants list ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 35,
+                        fontStyle: FontStyle.italic)),
+                FlatButton(
+                  child: Text(
+                    'Show Result',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  color: Colors.green,
+                  onPressed: () {},
+                )
+              ],
+            ),
             Expanded(
               child: SizedBox(
                 height: 500,
@@ -77,7 +89,12 @@ class Homepage extends StatelessWidget {
                   stream: candidatesProvider.candidates,
                   builder: (context, snapshot) {
                     if (snapshot.data.length == 0) {
-                      return Text("Voting has not started");
+                      return Center(
+                        child: Text(
+                          "Voting has not started(:",
+                          style: TextStyle(fontSize: 22, color: Colors.orange),
+                        ),
+                      );
                     } else {
                       return ListView.builder(
                         itemCount: snapshot.data.length,

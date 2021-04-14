@@ -35,6 +35,8 @@ class ContractLinking extends ChangeNotifier {
   ContractFunction _declareResults;
   String deployedName;
 
+  String get accountaddress => _accountAddress.toString();
+
   ContractLinking() {
     initialSetup();
   }
@@ -60,9 +62,10 @@ class ContractLinking extends ChangeNotifier {
         EthereumAddress.fromHex(jsonAbi["networks"]["5777"]["address"]);
   }
 
-  Future<void> getCredentials() async {
+  Future<String> getCredentials() async {
     _credentials = await _client.credentialsFromPrivateKey(_privateKey);
     _accountAddress = await _credentials.extractAddress();
+    return _accountAddress.toString();
   }
 
   Future<void> getDeployedContract() async {
