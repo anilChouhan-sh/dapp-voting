@@ -8,7 +8,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ContractLinking extends ChangeNotifier {
-  final String _rpcUrl = "http://172.30.73.0/:9999/";
+  final String _rpcUrl = "http://172.30.73.0:9999/";
   String _privateKey;
   String _results = "Not yet declared";
   String get privatekey => _privateKey;
