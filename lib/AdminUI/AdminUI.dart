@@ -143,32 +143,38 @@ class _AdminUIState extends State<AdminUI> {
           SizedBox(
             height: 300,
             child: StreamBuilder<List<Candidates>>(
-                stream: candidates.candidates,
-                builder: (context, snapshot) {
+              stream: candidates.candidates,
+              builder: (context, snapshot) {
+                if (snapshot.data.length == 0) {
+                  return Text('data');
+                } else {
                   return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.white70, width: 1),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 3,
-                          margin: EdgeInsets.fromLTRB(25, 8, 25, 8),
-                          child: SizedBox(
-                              height: 50,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                                child: Text(
-                                  snapshot.data[index].name,
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              )),
-                        );
-                      });
-                }),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white70, width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 3,
+                        margin: EdgeInsets.fromLTRB(25, 8, 25, 8),
+                        child: SizedBox(
+                            height: 50,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                              child: Text(
+                                snapshot.data[index].name,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            )),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -200,10 +206,9 @@ class _AdminUIState extends State<AdminUI> {
           ),
           RaisedButton(
             onPressed: () async {
-              await linkPorvider.declareResults(myToast);
+              //await linkPorvider.declareResults(myToast);
 
-              // print(ans[1]);
-              //Navigator.pushNamed(context, '/result');
+              Navigator.pushNamed(context, '/result');
             },
             color: Colors.blue[700],
             child: Text(

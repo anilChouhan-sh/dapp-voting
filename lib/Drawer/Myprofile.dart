@@ -59,7 +59,8 @@ class Myprofile extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "id - ${userProvider.currentUser.voterID}".toUpperCase(),
+                  " Your Voter Id - ${userProvider.currentUser.voterID}"
+                      .toUpperCase(),
                   style: TextStyle(
                     fontSize: 17,
                   ),
