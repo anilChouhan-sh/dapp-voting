@@ -8,10 +8,12 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ContractLinking extends ChangeNotifier {
-  final String _rpcUrl = "http://172.30.73.0:9999/";
+  final String _rpcUrl = "http://172.30.68.164:9999/";
   String _privateKey;
   String _results = "Not yet declared";
+  List _ans;
   String get privatekey => _privateKey;
+  List get ans => _ans;
 
   set changekey(String key) {
     _privateKey = key;
@@ -54,10 +56,10 @@ class ContractLinking extends ChangeNotifier {
   }
 
   Future<void> getAbi() async {
-    final response = await http.get(Uri.http('172.30.73.0', 'Voting.json'));
+    // final response = await http.get(Uri.http('172.30.73.0', 'Voting.json'));
     // Reading the contract abi
-    //String abiString = await rootBundle.loadString("assests/Voting.json");
-    String abiStringFile = response.body;
+    String abiStringFile = await rootBundle.loadString("assests/Voting.json");
+    //String abiStringFile = response.body;
     print("got from internet ${abiStringFile.substring(0, 20)}");
     //  print("got  ${abiString.substring(0, 20)}");
     var jsonAbi = jsonDecode(abiStringFile);
@@ -156,13 +158,14 @@ class ContractLinking extends ChangeNotifier {
   Future<dynamic> declareResults(Function mytoast) async {
     String result = "";
     try {
-      var ans = await _client
+      _ans = await _client
           .call(contract: _contract, function: _declareResults, params: []);
-      print("$ans");
+      print("$_ans");
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
       print(result);
+      _ans = null;
     }
   }
 }

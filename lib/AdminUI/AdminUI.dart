@@ -206,7 +206,7 @@ class _AdminUIState extends State<AdminUI> {
           ),
           RaisedButton(
             onPressed: () async {
-              //await linkPorvider.declareResults(myToast);
+              await linkPorvider.declareResults(myToast);
 
               Navigator.pushNamed(context, '/result');
             },

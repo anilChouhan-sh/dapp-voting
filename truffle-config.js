@@ -48,7 +48,7 @@ module.exports = {
      network_id: "*",       // Any network (default: none)
     },
     anil: {
-      host: "172.30.73.0",     // Localhost (default: none)
+      host: "172.30.68.164",     // Localhost (default: none)
       port: 9999,            // Standard Ethereum port (default: none)
       network_id: "5777",
       websockets : true ,
