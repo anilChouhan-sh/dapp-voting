@@ -39,6 +39,7 @@ class Homepage extends StatelessWidget {
 
       userProvider.changeCurrentUser = Users.fromJson(x.data());
       contractLink.changekey = userProvider.currentUser.privatekey;
+      print("key updated");
     }
 
     user();
@@ -128,7 +129,8 @@ class Homepage extends StatelessWidget {
                                     onPressed: () {
                                       contractLink.givevoteTo(
                                           BigInt.from(snapshot.data[index].id),
-                                          myToast);
+                                          myToast,
+                                          context);
                                     },
                                   ),
                                   SizedBox(
@@ -141,7 +143,6 @@ class Homepage extends StatelessWidget {
                         },
                       );
                     }
-                    ;
                   },
                 ),
               ),

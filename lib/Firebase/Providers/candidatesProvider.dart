@@ -10,10 +10,11 @@ class CandidatesProvider extends ChangeNotifier {
   Candidates _currentCandidate;
 
   String _name;
-  int _id;
+  int _id, _votes;
 //getter
   String get name => _name;
   int get id => _id;
+  int get votes => _votes;
 
   Stream<List<Candidates>> get candidates => firestore.getCandidates();
   Candidates get currentUser => _currentCandidate;
@@ -21,6 +22,11 @@ class CandidatesProvider extends ChangeNotifier {
 
   set changename(String name) {
     _name = name;
+    notifyListeners();
+  }
+
+  set changevotes(int votes) {
+    _votes = votes;
     notifyListeners();
   }
 

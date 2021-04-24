@@ -208,7 +208,7 @@ class _AdminUIState extends State<AdminUI> {
             onPressed: () async {
               await linkPorvider.declareResults(myToast);
 
-              Navigator.pushNamed(context, '/result');
+              //Navigator.pushNamed(context, '/result');
             },
             color: Colors.blue[700],
             child: Text(

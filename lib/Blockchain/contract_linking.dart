@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart' as fire;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -18,7 +19,7 @@ class ContractLinking extends ChangeNotifier {
   set changekey(String key) {
     _privateKey = key;
     // print("Your Key $_privateKey");
-    notifyListeners();
+    // notifyListeners();
   }
 
   Web3Client _client;
@@ -139,15 +140,36 @@ class ContractLinking extends ChangeNotifier {
     }
   }
 
-  givevoteTo(BigInt id, Function mytoast) async {
+  givevoteTo(BigInt id, Function mytoast, BuildContext context) async {
     isLoading = true;
     notifyListeners();
     String result = "";
     try {
-      await _client.sendTransaction(
+      String hash = await _client.sendTransaction(
           _credentials,
           Transaction.callContract(
               contract: _contract, function: _givevoteTo, parameters: [id]));
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Thank you for voting"),
+              actions: [
+                Text(hash),
+                Align(
+                  alignment: Alignment.center,
+                  child: RaisedButton(
+                    child: Text("Ok"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            );
+          });
+
+      print("Your hash $hash");
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
@@ -161,6 +183,20 @@ class ContractLinking extends ChangeNotifier {
       _ans = await _client
           .call(contract: _contract, function: _declareResults, params: []);
       print("$_ans");
+      // int ids = BigInt.from(_ans[0][0]).toInt();
+      // int votes = BigInt.from(_ans[0][1]).toInt();
+      print("your ids ${_ans[0][0].runtimeType}");
+      // print("your votes $votes");
+      int i = 0;
+      // for (i = 0; i < _ans[0].length; i++) {
+      //   fire.QuerySnapshot snap = await fire.FirebaseFirestore.instance
+      //       .collection('user')
+      //       .where("id", isEqualTo: int.parse(_ans[0][i]))
+      //       .get();
+      //   fire.DocumentReference ref = snap.docs[0].reference;
+
+      //   ref.set({"votes": int.parse(_ans[1][i])}, fire.SetOptions(merge: true));
+      // }
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
