@@ -6,12 +6,11 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:web_socket_channel/io.dart';
 
 class ContractLinking extends ChangeNotifier {
   final String _rpcUrl = "http://172.30.68.164:9999/";
   String _privateKey;
-  String _results = "Not yet declared";
+  // String _results = "Not yet declared";
   List _ans;
   String get privatekey => _privateKey;
   List get ans => _ans;
@@ -19,7 +18,7 @@ class ContractLinking extends ChangeNotifier {
   set changekey(String key) {
     _privateKey = key;
     // print("Your Key $_privateKey");
-    // notifyListeners();
+    notifyListeners();
   }
 
   Web3Client _client;
@@ -43,6 +42,7 @@ class ContractLinking extends ChangeNotifier {
 
   ContractLinking() {
     initialSetup();
+    print("pub key$accountaddress");
   }
 
   initialSetup() async {
@@ -50,13 +50,17 @@ class ContractLinking extends ChangeNotifier {
     // property allows more efficient event streams over websocket instead of
     // http-polls. However, the socketConnector property is experimental.
     _client = Web3Client(_rpcUrl, Client());
-
+    print("Setting up connection with BlockChain");
     await getAbi();
-    await getCredentials();
+    print("hello1");
+    // await getCredentials();
+    // print("hello2");
     await getDeployedContract();
+    print("hello3");
   }
 
   Future<void> getAbi() async {
+    print("Inside abi functions");
     // final response = await http.get(Uri.http('172.30.73.0', 'Voting.json'));
     // Reading the contract abi
     String abiStringFile = await rootBundle.loadString("assests/Voting.json");
@@ -71,8 +75,13 @@ class ContractLinking extends ChangeNotifier {
   }
 
   Future<String> getCredentials() async {
+    print("hello");
     _credentials = await _client.credentialsFromPrivateKey(_privateKey);
+
+    print("$_privateKey ----<");
     _accountAddress = await _credentials.extractAddress();
+    print("$_accountAddress ----<<<<");
+
     return _accountAddress.toString();
   }
 

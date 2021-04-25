@@ -1,11 +1,12 @@
-import 'package:dapp_voting/Firebase/Providers/userProviders.dart';
 import 'package:dapp_voting/Firebase/auth.dart';
+import 'package:dapp_voting/Sign-up/signup.dart';
+
+import 'package:dapp_voting/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -133,11 +134,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           ]);
                         }
                         if (FirebaseAuth.instance.currentUser.emailVerified) {
-                          if (FirebaseAuth.instance.currentUser.uid == admin) {
-                            Navigator.pushNamed(context, '/AdminUI');
-                          } else {
-                            Navigator.pushNamed(context, '/');
-                          }
+                          // if (FirebaseAuth.instance.currentUser.uid == admin) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      mainscreen()));
+                          // } else {
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (BuildContext context) =>
+                          //               AdminUI()));
+                          // }
                         } else {
                           myToast('Email Not verified.');
                         }
@@ -151,7 +160,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.teal[100],
                     textColor: Colors.black,
                     onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  SignupScreen()));
                     },
                   ),
                 ],

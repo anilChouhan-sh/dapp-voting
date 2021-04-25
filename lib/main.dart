@@ -1,7 +1,8 @@
 import 'package:dapp_voting/AdminUI/AdminUI.dart';
-import 'package:dapp_voting/AdminUI/results.dart';
 import 'package:dapp_voting/Blockchain/contract_linking.dart';
+import 'package:dapp_voting/Drawer/Myprofile.dart';
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
+import 'package:dapp_voting/Sign-up/signup.dart';
 
 import 'package:dapp_voting/homepage%20.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,11 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
+import 'AdminUI/results.dart';
 import 'Firebase/Providers/privateKeyprovider.dart';
 import 'Firebase/Providers/userProviders.dart';
 
 import 'Sign-up/Login.dart';
-import 'Sign-up/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,31 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey<NavigatorState> f = new GlobalKey();
-    return MultiProvider(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: mainscreen(),
+    );
+  }
+}
+
+class mainscreen extends StatefulWidget {
+  const mainscreen({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _mainscreenState createState() => _mainscreenState();
+}
+
+class _mainscreenState extends State<mainscreen> {
+  bool obscure = true;
+  User user = FirebaseAuth.instance.currentUser;
+  @override
+  Widget build(BuildContext context) {
+    if (user == null) {
+      return LoginScreen();
+    } else {
+      return MultiProvider(
         providers: [
           ChangeNotifierProvider(
             create: (context) {
@@ -52,38 +77,26 @@ class MainScreen extends StatelessWidget {
             },
           ),
         ],
-        child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            routes: {
-              '/': (context) => mainscreen(),
-              '/signup': (context) => SignupScreen(),
-              '/login': (context) => LoginScreen(),
-              '/votescreen': (context) => Homepage(),
-              '/AdminUI': (context) => AdminUI(),
-              '/result': (context) => Results(),
-            }));
-  }
-}
-
-class mainscreen extends StatefulWidget {
-  const mainscreen({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _mainscreenState createState() => _mainscreenState();
-}
-
-class _mainscreenState extends State<mainscreen> {
-  bool obscure = true;
-  User user = FirebaseAuth.instance.currentUser;
-  @override
-  Widget build(BuildContext context) {
-    if (user == null) {
-      return LoginScreen();
-    } else {
-      return Homepage();
+        child:
+            // Text('kjdas'));
+            Navigator(
+          initialRoute: '/votescreen',
+          onGenerateRoute: (RouteSettings settings) {
+            switch (settings.name) {
+              case '/signup':
+                return MaterialPageRoute(builder: (context) => SignupScreen());
+              case '/login':
+                return MaterialPageRoute(builder: (context) => LoginScreen());
+              case '/votescreen':
+                return MaterialPageRoute(builder: (context) => Homepage());
+              case '/result':
+                return MaterialPageRoute(builder: (context) => Results());
+              case '/myprofile':
+                return MaterialPageRoute(builder: (context) => Myprofile());
+            }
+          },
+        ),
+      );
     }
   }
 }

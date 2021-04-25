@@ -27,9 +27,10 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var contractLink = Provider.of<ContractLinking>(context);
-    var candidatesProvider = Provider.of<CandidatesProvider>(context);
-    var userProvider = Provider.of<UserProvider>(context);
+    var contractLink = Provider.of<ContractLinking>(context, listen: false);
+    var candidatesProvider =
+        Provider.of<CandidatesProvider>(context, listen: false);
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
 
     Future<void> user() async {
       DocumentSnapshot x = await FirebaseFirestore.instance
@@ -38,119 +39,131 @@ class Homepage extends StatelessWidget {
           .get();
 
       userProvider.changeCurrentUser = Users.fromJson(x.data());
-      contractLink.changekey = userProvider.currentUser.privatekey;
+
       print("key updated");
     }
 
-    user();
-    if (FirebaseAuth.instance.currentUser.uid == admin) {
-      return AdminUI();
-    } else {
-      return Scaffold(
+    user().whenComplete(() {
+      contractLink.changekey = userProvider.currentUser.privatekey;
+      contractLink.getCredentials();
+    });
+    print("builing it?");
+    return WillPopScope(
+      onWillPop: () {
+        return null;
+      },
+      child: Scaffold(
         drawer: Drawer(
           child: DrawerItem(),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: 280,
+        body: FirebaseAuth.instance.currentUser.uid == admin
+            ? AdminUI()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 280,
 
-              width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height,
-              child: ClipPath(
-                child: Image.asset(
-                  'images/vote.jpg',
-                ),
-                clipper: CustomClipPath(),
-              ),
-            ),
-            Row(
-              children: [
-                Text("   Participants list ",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 35,
-                        fontStyle: FontStyle.italic)),
-                FlatButton(
-                  child: Text(
-                    'Show Result',
-                    style: TextStyle(color: Colors.white),
+                    width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height,
+                    child: ClipPath(
+                      child: Image.asset(
+                        'images/vote.jpg',
+                      ),
+                      clipper: CustomClipPath(),
+                    ),
                   ),
-                  color: Colors.green,
-                  onPressed: () {},
-                )
-              ],
-            ),
-            Expanded(
-              child: SizedBox(
-                height: 500,
-                child: StreamBuilder<List<Candidates>>(
-                  stream: candidatesProvider.candidates,
-                  builder: (context, snapshot) {
-                    if (snapshot.data.length == 0) {
-                      return Center(
+                  Row(
+                    children: [
+                      Text("   Participants list ",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 35,
+                              fontStyle: FontStyle.italic)),
+                      FlatButton(
                         child: Text(
-                          "Voting has not started(:",
-                          style: TextStyle(fontSize: 22, color: Colors.orange),
+                          'Show Result',
+                          style: TextStyle(color: Colors.white),
                         ),
-                      );
-                    } else {
-                      return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            margin: EdgeInsets.fromLTRB(35, 5, 35, 5),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.white70, width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            color: Colors.blue,
-                            child: Container(
-                              height: 200,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: Image.asset("images/profile.jpg"),
-                                  ),
-                                  Text(snapshot.data[index].name,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 35,
-                                          fontStyle: FontStyle.italic)),
-                                  RaisedButton(
-                                    color: Colors.orange,
-                                    child: Text(
-                                      "VOTE",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: () {
-                                      contractLink.givevoteTo(
-                                          BigInt.from(snapshot.data[index].id),
-                                          myToast,
-                                          context);
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                ],
+                        color: Colors.green,
+                        onPressed: () {},
+                      )
+                    ],
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 500,
+                      child: StreamBuilder<List<Candidates>>(
+                        stream: candidatesProvider.candidates,
+                        builder: (context, snapshot) {
+                          if (snapshot.data.length == 0) {
+                            return Center(
+                              child: Text(
+                                "Voting has not started(:",
+                                style: TextStyle(
+                                    fontSize: 22, color: Colors.orange),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            return ListView.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  margin: EdgeInsets.fromLTRB(35, 5, 35, 5),
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.white70, width: 1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  color: Colors.blue,
+                                  child: Container(
+                                    height: 200,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child:
+                                              Image.asset("images/profile.jpg"),
+                                        ),
+                                        Text(snapshot.data[index].name,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 35,
+                                                fontStyle: FontStyle.italic)),
+                                        RaisedButton(
+                                          color: Colors.orange,
+                                          child: Text(
+                                            "VOTE",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: () {
+                                            contractLink.givevoteTo(
+                                                BigInt.from(
+                                                    snapshot.data[index].id),
+                                                myToast,
+                                                context);
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         },
-                      );
-                    }
-                  },
-                ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      );
-    }
+      ),
+    );
   }
 }
 

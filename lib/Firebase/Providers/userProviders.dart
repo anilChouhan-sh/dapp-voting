@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier {
 
   set changeCurrentUser(Users name) {
     _currentUser = name;
-    // notifyListeners();
+    notifyListeners();
   }
 
   set changekey(String key) {

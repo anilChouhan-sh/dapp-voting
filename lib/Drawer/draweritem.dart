@@ -1,5 +1,7 @@
 import 'package:dapp_voting/Drawer/Myprofile.dart';
 import 'package:dapp_voting/Firebase/auth.dart';
+import 'package:dapp_voting/Sign-up/Login.dart';
+import 'package:dapp_voting/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +20,7 @@ class DrawerItem extends StatelessWidget {
             leading: Icon(CupertinoIcons.profile_circled),
             title: Text('My Profile'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Myprofile()));
+              Navigator.pushNamed(context, '/myprofile');
             },
           ),
           Align(
@@ -50,7 +51,10 @@ class DrawerItem extends StatelessWidget {
                           ),
                           onPressed: () async {
                             await auth.signOut();
-                            Navigator.pushNamed(context, '/');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => mainscreen()));
                           },
                         ),
                       ],
