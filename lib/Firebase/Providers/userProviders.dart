@@ -5,7 +5,7 @@ import '../users.dart';
 
 class UserProvider with ChangeNotifier {
   final firestore = Firestore_ser();
-
+  bool _rights;
   Users _currentUser;
 
   String _name;
@@ -14,7 +14,7 @@ class UserProvider with ChangeNotifier {
   String _userid;
   String _key;
 //getter
-
+  bool get rights => _rights;
   String get name => _name;
   String get voterID => _voterID;
   String get email => _email;
@@ -54,6 +54,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set changerights(bool rights) {
+    _rights = rights;
+    notifyListeners();
+  }
+
   loadAll(Users user) {
     if (user != null) {
       _name = user.name;
@@ -69,7 +74,8 @@ class UserProvider with ChangeNotifier {
 
   saveUser() {
     //Edit
-    var updatedUser = Users(email: _email, name: _name, voterID: _voterID);
+    var updatedUser =
+        Users(email: _email, name: _name, voterID: _voterID, rights: _rights);
     firestore.setEntry(updatedUser, 'user');
   }
 }

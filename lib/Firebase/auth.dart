@@ -68,12 +68,14 @@ class Auth implements BaseAuth {
         if (value.docs.length > 0) {
           CollectionReference ref =
               FirebaseFirestore.instance.collection('user');
+
           ref.doc(user.user.uid).set({
             "name": name,
             "email": user.user.email,
             "voterID": voterID,
             "userid": user.user.uid,
-            "privatekey": value.docs[0]["key"]
+            "privatekey": value.docs[0]["key"],
+            "rights": false
           });
 
           var key = PrivateKeys(

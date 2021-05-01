@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dapp_voting/Blockchain/contract_linking.dart';
-import 'package:dapp_voting/Drawer/draweritem.dart';
+
 import 'package:dapp_voting/Firebase/Providers/candidatesProvider.dart';
 import 'package:dapp_voting/Firebase/candidates.dart';
+import 'package:dapp_voting/Firebase/users.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:web3dart/credentials.dart';
+import 'package:web3dart/web3dart.dart';
 
 import '../homepage .dart';
 
@@ -30,6 +34,36 @@ class _AdminUIState extends State<AdminUI> {
 
   bool status = true;
   bool tap = false;
+  List<String> _voters_to_verfiy = new List<String>();
+  List<Future<dynamic>> _voters_add = new List<Future<dynamic>>();
+  List<EthereumAddress> final_list = new List<EthereumAddress>();
+
+  Future<void> getpubKeys(dynamic context, dynamic linkpro) async {
+    QuerySnapshot voters = await FirebaseFirestore.instance
+        .collection("user")
+        .where("rights", isEqualTo: false)
+        .get();
+
+    voters.docs.forEach((voter) {
+      Users v = Users.fromJson(voter.data());
+      _voters_to_verfiy.add(v.privatekey.toString());
+    });
+
+    _voters_add = _voters_to_verfiy.map((e) async {
+      return await linkpro.getCredentials(false, mykey: e);
+    }).toList();
+
+    for (int i = 0; i < _voters_add.length; i++) {
+      EthereumAddress x = await _voters_add[i];
+      final_list.add(x);
+    }
+  }
+
+  Future<void> voterauth(dynamic linkProvider) async {
+    for (int i = 0; i < final_list.length; i++) {
+      await linkProvider.givevoterights(myToast, final_list[i]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +151,7 @@ class _AdminUIState extends State<AdminUI> {
                           onPressed: () {
                             candidates.changeid = int.parse(id.text.trim());
                             candidates.changename = name.text.trim();
+                            candidates.changevotes = 0;
                             candidates.savecandidates();
                             Navigator.of(context).pop();
                           },
@@ -171,46 +206,74 @@ class _AdminUIState extends State<AdminUI> {
             },
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RaisedButton(
-              color: status == true ? Colors.green : Colors.red,
-              child: status == true
-                  ? Text(
-                      "Start Voting",
-                      style: TextStyle(color: Colors.white),
-                    )
-                  : Text(
-                      "Stop Voating",
-                      style: TextStyle(color: Colors.white),
-                    ),
-              onPressed: () {
-                status == true
-                    ? setState(() {
-                        status = false;
-                        linkPorvider.start_voting(myToast);
-                      })
-                    : setState(() {
-                        status = true;
-                        linkPorvider.end_voting(myToast);
-                      });
-              },
-            ),
-          ],
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RaisedButton(
+                onPressed: () async {
+                  await linkPorvider.declareResults(myToast);
+
+                  Navigator.pushNamed(context, '/result');
+                },
+                color: Colors.blue[700],
+                child: Text(
+                  "Show Results",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  final_list = [];
+                  _voters_add = [];
+                  _voters_to_verfiy = [];
+                  getpubKeys(context, linkPorvider).whenComplete(() {
+                    print("verify these $final_list");
+                    linkPorvider.changenumber = 0;
+                    voterauth(linkPorvider).whenComplete(() => showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text(
+                                  "Done ${linkPorvider.no_auth_done} , Error ${linkPorvider.no_auth_error}"),
+                            )));
+                  });
+                },
+                color: Colors.blue[700],
+                child: Text(
+                  "Authenticate Voters",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
         ),
         RaisedButton(
-          onPressed: () async {
-            await linkPorvider.declareResults(myToast);
-
-            //Navigator.pushNamed(context, '/result');
+          color: status == true ? Colors.green : Colors.red,
+          child: status == true
+              ? Text(
+                  "Start Voting",
+                  style: TextStyle(color: Colors.white),
+                )
+              : Text(
+                  "Stop Voting",
+                  style: TextStyle(color: Colors.white),
+                ),
+          onPressed: () {
+            status == true
+                ? setState(() {
+                    status = false;
+                    linkPorvider.start_voting(myToast);
+                  })
+                : setState(() {
+                    status = true;
+                    linkPorvider.end_voting(myToast);
+                  });
           },
-          color: Colors.blue[700],
-          child: Text(
-            "Show Results",
-            style: TextStyle(color: Colors.white),
-          ),
-        )
+        ),
       ],
     );
   }

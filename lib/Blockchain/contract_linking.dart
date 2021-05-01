@@ -8,7 +8,7 @@ import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
 
 class ContractLinking extends ChangeNotifier {
-  final String _rpcUrl = "http://172.30.68.164:9999/";
+  final String _rpcUrl = "http://172.24.13.21:9999/";
   String _privateKey;
   // String _results = "Not yet declared";
   List _ans;
@@ -37,8 +37,16 @@ class ContractLinking extends ChangeNotifier {
   ContractFunction _givevoteTo;
   ContractFunction _declareResults;
   String deployedName;
-
+  int _no_auth_done;
+  int _no_auth_error;
   String get accountaddress => _accountAddress.toString();
+  int get no_auth_done => _no_auth_done;
+  int get no_auth_error => _no_auth_error;
+
+  set changenumber(int n) {
+    _no_auth_done = n;
+    _no_auth_error = n;
+  }
 
   ContractLinking() {
     initialSetup();
@@ -53,7 +61,7 @@ class ContractLinking extends ChangeNotifier {
     print("Setting up connection with BlockChain");
     await getAbi();
     print("hello1");
-    // await getCredentials();
+    // await getCredentials(true);
     // print("hello2");
     await getDeployedContract();
     print("hello3");
@@ -74,15 +82,18 @@ class ContractLinking extends ChangeNotifier {
         EthereumAddress.fromHex(jsonAbi["networks"]["5777"]["address"]);
   }
 
-  Future<String> getCredentials() async {
-    print("hello");
-    _credentials = await _client.credentialsFromPrivateKey(_privateKey);
+  Future<EthereumAddress> getCredentials(bool flag, {String mykey}) async {
+    Credentials _cred;
+    EthereumAddress _account;
+    if (flag) {
+      _credentials = await _client.credentialsFromPrivateKey(_privateKey);
 
-    print("$_privateKey ----<");
-    _accountAddress = await _credentials.extractAddress();
-    print("$_accountAddress ----<<<<");
-
-    return _accountAddress.toString();
+      _accountAddress = await _credentials.extractAddress();
+    } else {
+      _cred = await _client.credentialsFromPrivateKey(mykey);
+      _account = await _cred.extractAddress();
+    }
+    return _account;
   }
 
   Future<void> getDeployedContract() async {
@@ -133,20 +144,27 @@ class ContractLinking extends ChangeNotifier {
     }
   }
 
-  givevoterights(Function mytoast) async {
+  Future<String> givevoterights(
+      Function mytoast, EthereumAddress address) async {
     isLoading = true;
     notifyListeners();
     String result = "";
     try {
-      await _client.sendTransaction(
+      String x = await _client.sendTransaction(
           _credentials,
           Transaction.callContract(
-              contract: _contract, function: _givevoteright, parameters: []));
+              contract: _contract,
+              function: _givevoteright,
+              parameters: [address]));
+      _no_auth_done++;
+      return x;
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
       print(result);
+      _no_auth_error++;
     }
+    return "";
   }
 
   givevoteTo(BigInt id, Function mytoast, BuildContext context) async {
@@ -188,29 +206,32 @@ class ContractLinking extends ChangeNotifier {
 
   Future<dynamic> declareResults(Function mytoast) async {
     String result = "";
+    print("hello23");
     try {
       _ans = await _client
           .call(contract: _contract, function: _declareResults, params: []);
-      print("$_ans");
-      // int ids = BigInt.from(_ans[0][0]).toInt();
-      // int votes = BigInt.from(_ans[0][1]).toInt();
-      print("your ids ${_ans[0][0].runtimeType}");
+      print("${_ans}");
+      int bi = _ans[0][0].toInt();
+
+      print("your ids $bi     ${_ans[0][0].runtimeType}");
       // print("your votes $votes");
       int i = 0;
-      // for (i = 0; i < _ans[0].length; i++) {
-      //   fire.QuerySnapshot snap = await fire.FirebaseFirestore.instance
-      //       .collection('user')
-      //       .where("id", isEqualTo: int.parse(_ans[0][i]))
-      //       .get();
-      //   fire.DocumentReference ref = snap.docs[0].reference;
+      for (i = 0; i < _ans[0].length; i++) {
+        fire.QuerySnapshot snap = await fire.FirebaseFirestore.instance
+            .collection('candidates')
+            .where("id", isEqualTo: _ans[0][i].toInt())
+            .get();
+        fire.DocumentReference ref = snap.docs[0].reference;
 
-      //   ref.set({"votes": int.parse(_ans[1][i])}, fire.SetOptions(merge: true));
-      // }
+        ref.set({"votes": _ans[1][i].toInt()}, fire.SetOptions(merge: true));
+      }
     } on RPCError catch (e) {
       result = e.message.split(':')[1].substring(7);
       mytoast(result);
       print(result);
       _ans = null;
+    } catch (e) {
+      print("Some error for show results $e");
     }
   }
 }

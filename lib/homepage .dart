@@ -45,7 +45,7 @@ class Homepage extends StatelessWidget {
 
     user().whenComplete(() {
       contractLink.changekey = userProvider.currentUser.privatekey;
-      contractLink.getCredentials();
+      contractLink.getCredentials(true);
     });
     print("builing it?");
     return WillPopScope(

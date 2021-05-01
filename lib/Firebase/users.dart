@@ -1,9 +1,15 @@
 class Users {
   final String voterID;
   final String name, email, privatekey, userid;
-
+  final bool rights;
   List<dynamic> contacts;
-  Users({this.voterID, this.name, this.email, this.privatekey, this.userid});
+  Users(
+      {this.voterID,
+      this.name,
+      this.email,
+      this.privatekey,
+      this.userid,
+      this.rights});
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
@@ -11,7 +17,8 @@ class Users {
         voterID: json['voterID'],
         name: json['name'],
         email: json['email'],
-        privatekey: json['privatekey']);
+        privatekey: json['privatekey'],
+        rights: json['rights']);
   }
 
   Map<String, dynamic> toMap() {
@@ -20,7 +27,8 @@ class Users {
       'userid': userid,
       'name': name,
       'email': email,
-      'privatekey': privatekey
+      'privatekey': privatekey,
+      'rights': rights
     };
   }
 }
